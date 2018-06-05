@@ -6,7 +6,7 @@
     id = {{$task->id}}のタスク詳細ページ
 </h1>
 
-    <div class="col-xs-12 col-sm-offset-8 col-md-offset-8 col-lg-offset-3">
+    <div class="col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
     <table class="table table-bordered">
         <tr>
             <th>id</th>
