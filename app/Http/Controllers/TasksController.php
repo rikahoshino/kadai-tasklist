@@ -99,7 +99,7 @@ class TasksController extends Controller
     {
          $this->validate($request, [
             'status' => 'required|max:10',   // add
-            'content' => 'required|max:10',
+            'content' => 'required|max:191',
         ]);
         
         $task=Task::find($id);
