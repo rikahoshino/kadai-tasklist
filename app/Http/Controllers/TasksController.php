@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\User;
+
 use App\Task;
 
 
@@ -18,10 +20,10 @@ class TasksController extends Controller
     {
         if (\Auth::check()){
             $user = \Auth::user();
-            $tasks = $user->tasks()->orderBy('created_at', 'desc');
+            $tasks = $user->tasks;
 
             return view('tasks.index', [
-                'user' => $users,
+                'user' => $user,
                 'tasks' => $tasks
         ]);
         } else {
@@ -47,7 +49,8 @@ class TasksController extends Controller
    
     public function store(Request $request)
     {
-         $this->validate($request, [
+        if (\Auth::check()){
+             $this->validate($request, [
             'status' => 'required|max:10',   
             'content' => 'required|max:191',
         ]);
@@ -55,9 +58,14 @@ class TasksController extends Controller
         $task=new Task;
         $task->status=$request->status;
         $task->content=$request->content;
+        $task->user_id=\Auth::user()->id;
         $task->save();
         
         return redirect('/');
+        } else {
+            return view('welcome');
+        }
+        
     }
 
     /**
@@ -119,7 +127,12 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $this->validate($request, [
+        
+        if (\Auth::check()) {
+            $task=Task::find($id);
+            if ($task->user_id == \Auth::user()->id) {
+
+             $this->validate($request, [
             'status' => 'required|max:10',   // add
             'content' => 'required|max:191',
         ]);
@@ -130,6 +143,11 @@ class TasksController extends Controller
         $task->save();
         
         return redirect('/');
+            }
+        } else {
+           return view('welcome');
+        } 
+        
     }
 
     /**
